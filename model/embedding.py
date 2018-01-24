@@ -66,12 +66,12 @@ def get_model(model_param, session, config):
 
 def fit_emb(reviews, batch_feeder, config):
 
-    do_log_save = False
-    do_profiling = False
+    do_log_save = True
+    do_profiling = True
     log_save_path = 'log'
 
     # separate a validation set
-    use_valid_set = True 
+    use_valid_set = True
     if use_valid_set:
         reviews, valid_reviews = separate_valid(reviews, 0.1)
 
@@ -130,6 +130,7 @@ def fit_emb(reviews, batch_feeder, config):
 
             rind = np.random.choice(review_size)
             indices, labels = batch_feeder(reviews[rind])
+
             if indices.shape[0] <= 1: # neglect views with only one entry
                 raise Exception('Row %d of the data has only one non-zero entry.' % rind)
             feed_dict = {inputs['input_ind']: indices, inputs['input_label']: labels}
@@ -181,6 +182,8 @@ def fit_emb(reviews, batch_feeder, config):
                     ctf = tl.generate_chrome_trace_format()
                     with open(log_save_path + '/timeline_step%d.json' % (step / nprint), 'w') as f:
                         f.write(ctf)
+
+                pickle.dump(model['alpha'], open('model_%d.json' & step, 'wb'), -1)
 
 
         model = get_model(model_param, session, config)
