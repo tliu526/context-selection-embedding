@@ -78,7 +78,7 @@ def embedding_experiment(config, mat, outname):
     emb_vec = emb_model['alpha']
     print('Embedding matrix has shape ', emb_vec.shape)
 
-    for k in emb_vec.keys():
+    for k in emb_model.keys():
         pickle.dump(emb_model[k], open(outname+'_'+k+'.pk', 'wb'), -1)
 
     print('Done!')
